@@ -1,0 +1,212 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>14</LangVersion>
+    <AssemblyName>SgrMystiaAssistant</AssemblyName>
+    <Product>SgrMystiaAssistant</Product>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RootNamespace>SgrMystiaAssistant</RootNamespace>
+    <GamePath>D:\SteamLibrary\steamapps\common\Touhou Mystia Izakaya</GamePath>
+    <OutputPath>$(GamePath)\BepInEx\plugins</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+  </PropertyGroup>
+
+  <Target Name="RenameBuildOutput" AfterTargets="Build">
+    <PropertyGroup>
+      <RenamedAssembly>$(AssemblyName)-v$(Version)</RenamedAssembly>
+      <RenamedAssemblyPath>$(OutputPath)$(RenamedAssembly)</RenamedAssemblyPath>
+    </PropertyGroup>
+    <Move SourceFiles="$(TargetPath)" DestinationFiles="$(RenamedAssemblyPath)$(TargetExt)" />
+    <Message Text="Renamed $(TargetPath) to $(RenamedAssemblyPath)$(TargetExt)" Importance="High" />
+  </Target>
+
+  <Target Name="CopyToExtraOutputPaths" AfterTargets="Build" DependsOnTargets="RenameBuildOutput">
+    <ItemGroup>
+      <ExtraOutputPaths Include="D:\Touhou Mystia Izakaya v4.3.0\BepInEx\plugins" />
+    </ItemGroup>
+    <Copy SourceFiles="$(RenamedAssemblyPath)$(TargetExt)" DestinationFolder="@(ExtraOutputPaths)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(TargetDir)$(AssemblyName).pdb" DestinationFolder="@(ExtraOutputPaths)" SkipUnchangedFiles="true" />
+    <Message Text="Copied $(RenamedAssemblyPath)$(TargetExt) to @(ExtraOutputPaths)" Importance="High" />
+  </Target>
+
+
+  <ItemGroup>
+    <ProjectReference Include="LogGenerator\LogGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="LogGenerator\**" />
+    <EmbeddedResource Remove="LogGenerator\**" />
+    <None Remove="LogGenerator\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Assembly-CSharp\**" />
+    <EmbeddedResource Remove="Assembly-CSharp\**" />
+    <None Remove="Assembly-CSharp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(GamePath)\BepInEx\interop\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>$(GamePath)\BepInEx\interop\Assembly-CSharp-firstpass.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BepInEx.Core">
+      <HintPath>$(GamePath)\BepInEx\core\BepInEx.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BepInEx.Preloader.Core">
+      <HintPath>$(GamePath)\BepInEx\core\BepInEx.Preloader.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BepInEx.Unity.Common">
+      <HintPath>$(GamePath)\BepInEx\core\BepInEx.Unity.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BepInEx.Unity.IL2CPP">
+      <HintPath>$(GamePath)\BepInEx\core\BepInEx.Unity.IL2CPP.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2CppSystem">
+      <HintPath>$(GamePath)\BepInEx\interop\Il2CppSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>$(GamePath)\BepInEx\interop\Il2Cppmscorlib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2CppSystem.Core">
+      <HintPath>$(GamePath)\BepInEx\interop\Il2CppSystem.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2CppSystem.Data">
+      <HintPath>$(GamePath)\BepInEx\interop\Il2CppSystem.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2CppSystem.Net.Http">
+      <HintPath>$(GamePath)\BepInEx\interop\Il2CppSystem.Net.Http.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UniTask">
+      <HintPath>$(GamePath)\BepInEx\interop\UniTask.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TilemapModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.TilemapModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.GridModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.GridModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.Physics2DModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.JSONSerializeModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.DirectorModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.DirectorModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.InputModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(GamePath)\BepInEx\interop\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>$(GamePath)\BepInEx\interop\Unity.Addressables.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(GamePath)\BepInEx\interop\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.InputSystem.dll">
+      <HintPath>$(GamePath)\BepInEx\interop\Unity.InputSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>$(GamePath)\BepInEx\interop\Unity.ResourceManager.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DEYU.Singletons">
+      <HintPath>$(GamePath)\BepInEx\interop\DEYU.Singletons.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DEYU.AssetHandleUtility">
+      <HintPath>$(GamePath)\BepInEx\interop\DEYU.AssetHandleUtility.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DEYU.AdpUISystemUniTaskExtension">
+      <HintPath>$(GamePath)\BepInEx\interop\DEYU.AdpUISystemUniTaskExtension.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DEYU.ObjectSpawner">
+      <HintPath>$(GamePath)\BepInEx\interop\DEYU.ObjectSpawner.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Omt.GamePlatformAPI">
+      <HintPath>$(GamePath)\BepInEx\interop\Omt.GamePlatformAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Omt.GamePlatformAPI">
+      <HintPath>$(GamePath)\BepInEx\interop\DEYU.AdaptiveUISystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(GamePath)\BepInEx\interop\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+</Project>
